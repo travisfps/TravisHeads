@@ -6,18 +6,18 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class StyleHeadsPlaceholder extends PlaceholderExpansion {
+public class TravisHeadsPlaceholder extends PlaceholderExpansion {
 
     private final TravisHeads plugin;
 
-    public StyleHeadsPlaceholder(TravisHeads plugin) {
+    public TravisHeadsPlaceholder(TravisHeads plugin) {
         this.plugin = plugin;
     }
 
     @Override
     @NotNull
     public String getIdentifier() {
-        return "styleheads";
+        return "travisheads";
     }
 
     @Override
