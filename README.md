@@ -179,7 +179,7 @@ menus:
 1. Baixe o plugin
 2. Coloque na pasta `plugins/`
 3. Reinicie o servidor
-4. Configure em `plugins/StyleHeads/`
+4. Configure em `plugins/TravisHeads/`
 5. Use `/heads reload` após editar configs
 
 ## 📝 Mensagens
@@ -188,7 +188,7 @@ Todas as mensagens são configuráveis em `mensagens/messages.yml`:
 
 ```yaml
 messages:
-  prefix: "&8[&6StyleHeads&8] &7"
+  prefix: "&8[&6TravisHeads&8] &7"
   
   only-players: "&cApenas jogadores podem usar este comando!"
   no-permission: "&cVocê não tem permissão para isso!"
