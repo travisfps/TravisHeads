@@ -6,21 +6,21 @@ Plugin de heads customizáveis para Spigot 1.8.x - 1.21.x com sistema de raridad
 
 | Comando | Permissão | Descrição |
 |---------|-----------|-----------|
-| `/heads` | `styleheads.use` | Abre o menu principal |
-| `/heads reload` | `styleheads.admin` | Recarrega as configurações |
+| `/heads` | `travisheads.use` | Abre o menu principal |
+| `/heads reload` | `travisheads.admin` | Recarrega as configurações |
 
 ## 🎯 Placeholders
 
 Requer [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
 
 ```yaml
-| `%styleheads_heads%` | Total de heads do jogador 
-| `%styleheads_total%` | Mesma coisa que `heads`
-| `%styleheads_comum%` | Quantidade de heads comuns
-| `%styleheads_raro%` | Quantidade de heads raras
-| `%styleheads_epico%` | Quantidade de heads épicas
-| `%styleheads_lendario%` | Quantidade de heads lendárias
-| `%styleheads_rarity_<id>%` | Heads de uma raridade específica | `%styleheads_rarity_comum%` |
+| `%travisheads_heads%` | Total de heads do jogador 
+| `%travisheads_total%` | Mesma coisa que `heads`
+| `%travisheads_comum%` | Quantidade de heads comuns
+| `%travisheads_raro%` | Quantidade de heads raras
+| `%travisheads_epico%` | Quantidade de heads épicas
+| `%travisheads_lendario%` | Quantidade de heads lendárias
+| `%travisheads_rarity_<id>%` | Heads de uma raridade específica | `%styleheads_rarity_comum%` |
 ```
 
 ## ⚙️ Configuração Básica
