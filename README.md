@@ -13,13 +13,13 @@ Plugin de heads customizáveis para Spigot 1.8.x - 1.21.x com sistema de raridad
 
 Requer [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
 
-| `%styleheads_heads%` | Total de heads do jogador | `42` |
+```| `%styleheads_heads%` | Total de heads do jogador | `42` |
 | `%styleheads_total%` | Mesma coisa que `heads` | `42` |
 | `%styleheads_comum%` | Quantidade de heads comuns | `15` |
 | `%styleheads_raro%` | Quantidade de heads raras | `8` |
 | `%styleheads_epico%` | Quantidade de heads épicas | `3` |
 | `%styleheads_lendario%` | Quantidade de heads lendárias | `1` |
-| `%styleheads_rarity_<id>%` | Heads de uma raridade específica | `%styleheads_rarity_comum%` |
+| `%styleheads_rarity_<id>%` | Heads de uma raridade específica | `%styleheads_rarity_comum%` |```
 
 ## ⚙️ Configuração Básica
 
