@@ -26,7 +26,7 @@ public class HeadsCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
-            if (!player.hasPermission("styleheads.admin")) {
+            if (!player.hasPermission("travisheads.admin")) {
                 player.sendMessage(MessageUtil.getMessage("no-permission"));
                 return true;
             }
@@ -42,7 +42,7 @@ public class HeadsCommand implements CommandExecutor {
         }
 
         if (args.length > 0 && args[0].equalsIgnoreCase("stats")) {
-            if (!player.hasPermission("styleheads.admin")) {
+            if (!player.hasPermission("travisheads.admin")) {
                 player.sendMessage(MessageUtil.getMessage("no-permission"));
                 return true;
             }
@@ -74,7 +74,7 @@ public class HeadsCommand implements CommandExecutor {
         }
 
         if (args.length > 0 && args[0].equalsIgnoreCase("cache")) {
-            if (!player.hasPermission("styleheads.admin")) {
+            if (!player.hasPermission("travisheads.admin")) {
                 player.sendMessage(MessageUtil.getMessage("no-permission"));
                 return true;
             }
