@@ -1,5 +1,5 @@
 messages:
-  prefix: "&8[&6StyleHeads&8] &7"
+  prefix: "&8[&6TravisHeads&8] &7"
 
   only-players: "&cApenas jogadores podem usar este comando!"
   no-permission: "&cVocê não tem permissão para isso!"
@@ -11,4 +11,5 @@ messages:
 
   exchange-success: "&aTroca realizada! Você trocou &f%amount%x %rarity% &apor recompensas!"
   exchange-error: "&cErro ao processar a troca!"
+
   not-enough-heads: "&cVocê não tem heads suficientes! Necessário: &f%amount%x %rarity% &c(Você tem: &f%current%&c)"
