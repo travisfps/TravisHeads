@@ -1,0 +1,21 @@
+name: TravisHeads
+version: '1.0'
+main: com.travisheads.TravisHeads
+api-version: 1.13
+authors: [SeuNome]
+description: Sistema de coleta de heads com raridades
+softdepend: [PlaceholderAPI]
+
+commands:
+  heads:
+    description: Comando principal
+    usage: /<command>
+    aliases: [head, sh]
+
+permissions:
+  styleheads.admin:
+    description: Permissão de administrador
+    default: op
+  styleheads.use:
+    description: Usar o plugin
+    default: true

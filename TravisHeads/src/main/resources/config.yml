@@ -1,0 +1,22 @@
+settings:
+  # Chance de dropar head ao matar um jogador (0-100%)
+  drop-chance: 50.0
+
+  # Modo de drop das heads
+  # INVENTORY - Adiciona direto ao inventário do killer
+  # DROP - Dropa no chão como item normal
+  # BOTH - Adiciona ao inventário E dropa no chão
+  drop-mode: "INVENTORY"
+
+head:
+  # Placeholders disponíveis:
+  #   %player% - Nome do jogador que morreu
+  #   %rarity% - Nome da raridade (ex: Comum, Rara, Épica)
+  #   %rarity_color% - Cor da raridade (ex: &f, &9, &5)
+  display-name: "&f%player% &8[%rarity_color%%rarity%&8]"
+  lore:
+    - ""
+    - "&7Raridade: %rarity_color%%rarity%"
+    - "&7Jogador: &f%player%"
+    - ""
+    - "%rarity_color%✦ Head Colecionável"

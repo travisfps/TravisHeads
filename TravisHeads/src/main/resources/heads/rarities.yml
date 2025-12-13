@@ -1,0 +1,25 @@
+rarities:
+  comum:
+    displayName: "Comum"
+    chance: 50.0
+    color: "&f"
+
+  rara:
+    displayName: "Rara"
+    chance: 30.0
+    color: "&9"
+
+  epica:
+    displayName: "Épica"
+    chance: 15.0
+    color: "&5"
+
+  lendaria:
+    displayName: "Lendária"
+    chance: 4.0
+    color: "&6"
+
+  mitica:
+    displayName: "Mítica"
+    chance: 1.0
+    color: "&c"

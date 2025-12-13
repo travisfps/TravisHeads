@@ -1,0 +1,24 @@
+exchanges:
+  vip_30d:
+    slot: 20
+    icon:
+      type: "SKULL"
+      custom-skull: true
+      skull-url: "3ed1aba73f639f4bc42bd48196c715197be2712c3b962c97ebf9e9ed8efa025"
+      display-name: "&6&lVIP 30 Dias"
+      lore:
+        - "&7Troque suas heads por"
+        - "&7&l30 dias de VIP!"
+        - ""
+        - "&eRequer: &c5x Lendária"
+        - ""
+        - "&aClique para trocar!"
+
+    requirements:
+      rarity: "lendaria"
+      amount: 5
+
+    rewards:
+      commands:
+        - "darvip %player% vip 30d"
+        - "tell %player% &aVocê recebeu 30 dias de VIP!"
