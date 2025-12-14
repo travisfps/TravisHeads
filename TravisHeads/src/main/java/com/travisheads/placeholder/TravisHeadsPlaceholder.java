@@ -45,18 +45,19 @@ public class TravisHeadsPlaceholder extends PlaceholderExpansion {
         }
 
         if (identifier.equals("heads") || identifier.equals("total")) {
-            return String.valueOf(plugin.getHeadsManager().getTotalHeads(player));
+            return String.valueOf(plugin.getHeadsCache().getTotalHeads(player));
         }
 
         if (identifier.startsWith("rarity_")) {
             String rarityId = identifier.substring(7);
-            int count = plugin.getHeadsManager().getHeadsByRarity(player)
+            int count = plugin.getHeadsCache().getHeadsByRarity(player)
                     .getOrDefault(rarityId, 0);
             return String.valueOf(count);
         }
 
-        int count = plugin.getHeadsManager().getHeadsByRarity(player)
+        int count = plugin.getHeadsCache().getHeadsByRarity(player)
                 .getOrDefault(identifier, 0);
+        
         if (count > 0 || plugin.getRarityManager().getRarity(identifier) != null) {
             return String.valueOf(count);
         }
