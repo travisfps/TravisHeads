@@ -13,9 +13,7 @@ public class ConfigCache {
     private final ConfigManager configManager;
 
     private final Cache<String, ConfigurationSection> sectionCache;
-
     private final Cache<String, Object> valueCache;
-
     private final Cache<String, List<String>> listCache;
 
     public ConfigCache(ConfigManager configManager) {
@@ -25,30 +23,35 @@ public class ConfigCache {
                 .expireAfterAccess(5, TimeUnit.MINUTES)
                 .maximumSize(500)
                 .weakKeys()
+                .weakValues()
                 .build();
 
         this.valueCache = Caffeine.newBuilder()
                 .expireAfterAccess(5, TimeUnit.MINUTES)
                 .maximumSize(1000)
                 .weakKeys()
+                .weakValues()
                 .build();
 
         this.listCache = Caffeine.newBuilder()
                 .expireAfterAccess(5, TimeUnit.MINUTES)
                 .maximumSize(300)
                 .weakKeys()
+                .weakValues()
                 .build();
     }
 
     public ConfigurationSection getSection(FileConfiguration config, String path) {
+        if (config == null || path == null) return null;
+        
         String cacheKey = getCacheKey(config, path);
-
         return sectionCache.get(cacheKey, k -> config.getConfigurationSection(path));
     }
 
     public String getString(FileConfiguration config, String path, String defaultValue) {
+        if (config == null || path == null) return defaultValue;
+        
         String cacheKey = getCacheKey(config, path);
-
         return (String) valueCache.get(cacheKey, k -> {
             String value = config.getString(path);
             return value != null ? value : defaultValue;
@@ -56,26 +59,54 @@ public class ConfigCache {
     }
 
     public int getInt(FileConfiguration config, String path, int defaultValue) {
+        if (config == null || path == null) return defaultValue;
+        
         String cacheKey = getCacheKey(config, path);
-
-        return (int) valueCache.get(cacheKey, k -> config.getInt(path, defaultValue));
+        Object cached = valueCache.getIfPresent(cacheKey);
+        
+        if (cached instanceof Integer) {
+            return (Integer) cached;
+        }
+        
+        int value = config.getInt(path, defaultValue);
+        valueCache.put(cacheKey, value);
+        return value;
     }
 
     public double getDouble(FileConfiguration config, String path, double defaultValue) {
+        if (config == null || path == null) return defaultValue;
+        
         String cacheKey = getCacheKey(config, path);
-
-        return (double) valueCache.get(cacheKey, k -> config.getDouble(path, defaultValue));
+        Object cached = valueCache.getIfPresent(cacheKey);
+        
+        if (cached instanceof Double) {
+            return (Double) cached;
+        }
+        
+        double value = config.getDouble(path, defaultValue);
+        valueCache.put(cacheKey, value);
+        return value;
     }
 
     public boolean getBoolean(FileConfiguration config, String path, boolean defaultValue) {
+        if (config == null || path == null) return defaultValue;
+        
         String cacheKey = getCacheKey(config, path);
-
-        return (boolean) valueCache.get(cacheKey, k -> config.getBoolean(path, defaultValue));
+        Object cached = valueCache.getIfPresent(cacheKey);
+        
+        if (cached instanceof Boolean) {
+            return (Boolean) cached;
+        }
+        
+        boolean value = config.getBoolean(path, defaultValue);
+        valueCache.put(cacheKey, value);
+        return value;
     }
 
     public List<String> getStringList(FileConfiguration config, String path) {
+        if (config == null || path == null) return null;
+        
         String cacheKey = getCacheKey(config, path);
-
         return listCache.get(cacheKey, k -> config.getStringList(path));
     }
 
@@ -83,18 +114,22 @@ public class ConfigCache {
         sectionCache.invalidateAll();
         valueCache.invalidateAll();
         listCache.invalidateAll();
-
-        sectionCache.cleanUp();
-        valueCache.cleanUp();
-        listCache.cleanUp();
+        cleanUp();
     }
 
     public void invalidate(String configName) {
+        if (configName == null) return;
+        
         String prefix = configName + ":";
-
         sectionCache.asMap().keySet().removeIf(key -> key.startsWith(prefix));
         valueCache.asMap().keySet().removeIf(key -> key.startsWith(prefix));
         listCache.asMap().keySet().removeIf(key -> key.startsWith(prefix));
+    }
+
+    public void cleanUp() {
+        sectionCache.cleanUp();
+        valueCache.cleanUp();
+        listCache.cleanUp();
     }
 
     public String getStats() {
