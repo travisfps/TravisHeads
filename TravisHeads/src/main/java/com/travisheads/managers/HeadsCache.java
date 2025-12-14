@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.travisheads.TravisHeads;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +15,6 @@ public class HeadsCache {
     private final TravisHeads plugin;
 
     private final Cache<UUID, Integer> totalHeadsCache;
-
     private final Cache<UUID, Map<String, Integer>> headsByRarityCache;
 
     public HeadsCache(TravisHeads plugin) {
@@ -23,39 +23,58 @@ public class HeadsCache {
         this.totalHeadsCache = Caffeine.newBuilder()
                 .expireAfterWrite(30, TimeUnit.SECONDS)
                 .maximumSize(1000)
+                .weakValues()
                 .recordStats()
                 .build();
 
         this.headsByRarityCache = Caffeine.newBuilder()
                 .expireAfterWrite(30, TimeUnit.SECONDS)
                 .maximumSize(1000)
+                .weakValues()
                 .recordStats()
                 .build();
     }
 
     public int getTotalHeads(Player player) {
-        UUID playerId = player.getUniqueId();
+        if (player == null || !player.isOnline()) return 0;
 
-        return totalHeadsCache.get(playerId, key ->
-                plugin.getHeadsManager().getTotalHeads(player)
-        );
+        UUID playerId = player.getUniqueId();
+        Integer cached = totalHeadsCache.getIfPresent(playerId);
+        
+        if (cached != null) {
+            return cached;
+        }
+
+        int total = plugin.getHeadsManager().getTotalHeads(player);
+        totalHeadsCache.put(playerId, total);
+        return total;
     }
 
     public Map<String, Integer> getHeadsByRarity(Player player) {
-        UUID playerId = player.getUniqueId();
+        if (player == null || !player.isOnline()) {
+            return Collections.emptyMap();
+        }
 
-        return headsByRarityCache.get(playerId, key ->
-                plugin.getHeadsManager().getHeadsByRarity(player)
-        );
+        UUID playerId = player.getUniqueId();
+        Map<String, Integer> cached = headsByRarityCache.getIfPresent(playerId);
+        
+        if (cached != null) {
+            return cached;
+        }
+
+        Map<String, Integer> data = plugin.getHeadsManager().getHeadsByRarity(player);
+        headsByRarityCache.put(playerId, data);
+        return data;
     }
 
     public void invalidate(Player player) {
-        UUID playerId = player.getUniqueId();
-        totalHeadsCache.invalidate(playerId);
-        headsByRarityCache.invalidate(playerId);
+        if (player == null) return;
+        invalidate(player.getUniqueId());
     }
 
     public void invalidate(UUID playerId) {
+        if (playerId == null) return;
+        
         totalHeadsCache.invalidate(playerId);
         headsByRarityCache.invalidate(playerId);
     }
@@ -63,9 +82,7 @@ public class HeadsCache {
     public void invalidateAll() {
         totalHeadsCache.invalidateAll();
         headsByRarityCache.invalidateAll();
-
-        totalHeadsCache.cleanUp();
-        headsByRarityCache.cleanUp();
+        cleanUp();
     }
 
     public String getStats() {
