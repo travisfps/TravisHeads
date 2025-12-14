@@ -2,7 +2,7 @@ name: TravisHeads
 version: '1.0'
 main: com.travisheads.TravisHeads
 api-version: 1.13
-authors: [SeuNome]
+authors: [Travis]
 description: Sistema de coleta de heads com raridades
 softdepend: [PlaceholderAPI]
 
