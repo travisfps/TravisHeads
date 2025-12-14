@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.Map;
@@ -15,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GUIManager implements Listener {
 
     private final TravisHeads plugin;
-
     private final Map<UUID, GUIHandler> activeGUIs = new ConcurrentHashMap<>();
 
     public GUIManager(TravisHeads plugin) {
@@ -24,25 +24,37 @@ public class GUIManager implements Listener {
     }
 
     public void registerGUI(Player player, Inventory inventory, GUIHandler handler) {
-        UUID playerId = player.getUniqueId();
-
-        GUIHandler oldHandler = activeGUIs.remove(playerId);
-        if (oldHandler != null) {
-            oldHandler.onClose(player);
+        if (player == null || handler == null) {
+            return;
         }
-
-        activeGUIs.put(playerId, handler);
+        
+        UUID playerId = player.getUniqueId();
+        GUIHandler oldHandler = activeGUIs.put(playerId, handler);
+        
+        if (oldHandler != null && oldHandler != handler) {
+            try {
+                oldHandler.onClose(player);
+            } catch (Exception e) {
+                plugin.getLogger().warning("Erro ao fechar GUI anterior: " + e.getMessage());
+            }
+        }
     }
 
     public void unregisterGUI(Player player) {
+        if (player == null) return;
+        
         GUIHandler handler = activeGUIs.remove(player.getUniqueId());
         if (handler != null) {
-            handler.onClose(player);
+            try {
+                handler.onClose(player);
+            } catch (Exception e) {
+                plugin.getLogger().warning("Erro ao desregistrar GUI: " + e.getMessage());
+            }
         }
     }
 
     public boolean hasActiveGUI(Player player) {
-        return activeGUIs.containsKey(player.getUniqueId());
+        return player != null && activeGUIs.containsKey(player.getUniqueId());
     }
 
     @EventHandler
@@ -54,7 +66,25 @@ public class GUIManager implements Listener {
 
         if (handler != null && handler.getInventory().equals(event.getInventory())) {
             event.setCancelled(true);
-            handler.onClick(player, event.getSlot(), event.getCurrentItem());
+            
+            try {
+                handler.onClick(player, event.getSlot(), event.getCurrentItem());
+            } catch (Exception e) {
+                plugin.getLogger().severe("Erro ao processar clique no GUI: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+
+        Player player = (Player) event.getWhoClicked();
+        GUIHandler handler = activeGUIs.get(player.getUniqueId());
+
+        if (handler != null && handler.getInventory().equals(event.getInventory())) {
+            event.setCancelled(true);
         }
     }
 
@@ -71,7 +101,16 @@ public class GUIManager implements Listener {
     }
 
     public void closeAll() {
-        activeGUIs.values().forEach(handler -> {
+        activeGUIs.forEach((uuid, handler) -> {
+            try {
+                Player player = plugin.getServer().getPlayer(uuid);
+                if (player != null && player.isOnline()) {
+                    player.closeInventory();
+                }
+                handler.onClose(player);
+            } catch (Exception e) {
+                plugin.getLogger().warning("Erro ao fechar GUI: " + e.getMessage());
+            }
         });
         activeGUIs.clear();
     }
